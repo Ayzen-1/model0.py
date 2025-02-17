@@ -1,30 +1,32 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from sklearn.ensemble import RandomForestClassifier
 
-st.title('🎈 Я что то делаю')
+st.title('😁😂 My first website')
+
+st.write('Тут я задеплою модель классификации')
 
 df = pd.read_csv("https://raw.githubusercontent.com/dataprofessor/data/master/penguins_cleaned.csv")
 
 with st.expander('Data'):
-  st.write('X')   
+  st.write("X")
   X_raw = df.drop('species', axis=1)
   st.dataframe(X_raw)
-  
-  st.write('y')
+
+  st.write("y")
   y_raw = df.species
   st.dataframe(y_raw)
 
-
 with st.sidebar:
-  st.header("Input same:")
-  island = st.selectbox('Island', ('Torgerson', 'Dream', 'Biscose'))
+  st.header("Введите признаки: ")
+  island = st.selectbox('Island', ('Torgersen', 'Dream', 'Biscoe'))
   bill_length_mm = st.slider('Bill length (mm)', 32.1, 59.6, 44.5)
   bill_depth_mm = st.slider('Bill depth (mm)', 13.1, 21.5, 17.3)
   flipper_length_mm = st.slider('Flipper length (mm)', 32.1, 59.6, 44.5)
-  body_mass_g = st.slider('Body Mass (g)', 32.1, 59.6, 44.5)
+  body_mass_g = st.slider('Body mass (g)', 32.1, 59.6, 44.5)
   gender = st.selectbox('Gender', ('female', 'male'))
+
+# Plotting some features
 st.subheader('Data Visualization')
 fig = px.scatter(
     df,
@@ -51,37 +53,40 @@ data = {
     'body_mass_g': body_mass_g,
     'sex': gender
 }
-
 input_df = pd.DataFrame(data, index=[0])
 input_penguins = pd.concat([input_df, X_raw], axis=0)
 
-with st.expander('Inp Feat'):
-  st.write('**Input pengunis**')
-  st.dataframe(input_df)
-  st.write('com')
-  st.dataframe(input_penguins)
+with st.expander('Input features'):
+    st.write('**Input penguin**')
+    st.dataframe(input_df)
+    st.write('**Combined penguins data** (input row + original data)')
+    st.dataframe(input_penguins)
 encode = ['island', 'sex']
 df_penguins = pd.get_dummies(input_penguins, prefix=encode)
+# Separate the top row (our input) from the rest
+X = df_penguins[1:]
 input_row = df_penguins[:1]
+# Encode the target
+target_mapper = {'Adelie': 0, 'Chinstrap': 1, 'Gentoo': 2}
+def target_encode(val):
+    return target_mapper[val]
+y = y_raw.apply(target_encode)
 
-target_mapper= {'Adelie':0, 'Chinstrap':1, 'Gentoo':2}
+with st.expander('Data preparation'):
+    st.write('**Encoded X (input penguin)**')
+    st.dataframe(input_row)
+    st.write('**Encoded y**')
+    st.write(y)
 
-def tar_enc(val):
-  return target_mapper[val] 
-y = y_raw.apply(tar_enc)
-
-with st.expander('Data prerp'):
-  st.write('**Encded y x (Input pengunis)**')
-  st.dataframe(input_row)
-  st.write('**Encded y**')
-  st.dataframe(y)  
-
+from sklearn.ensemble import RandomForestClassifier
+import numpy as np
 
 base_rf = RandomForestClassifier(random_state=42)
 base_rf.fit(X, y)
 prediction = base_rf.predict(input_row)
-predict_proba = base_rf.predicr_prba(input_row)
-df_pred_proba = pd.DataFrame(predict_proba, columns=['Adelie', 'Chinstrap', 'Gentoo'])
+prediction_proba = base_rf.predict_proba(input_row)
+df_prediction_proba = pd.DataFrame(prediction_proba, columns=['Adelie', 'Chinstrap', 'Gentoo'])
+
 st.subheader('Predicted Species')
 st.dataframe(
     df_prediction_proba,
@@ -113,17 +118,3 @@ st.dataframe(
 
 penguins_species = np.array(['Adelie', 'Chinstrap', 'Gentoo'])
 st.success(f"Predicted species: **{penguins_species[prediction][0]}**")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
