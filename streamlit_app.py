@@ -40,3 +40,41 @@ fig2 = px.histogram(
     title='Distribution of Body Mass'
 )
 st.plotly_chart(fig2)
+
+with st.expander('Inp Feat'):
+  st.write('**Input pengunis**')
+  st.dataframe(input_df)
+  st.write('com')
+  st.dataframe(input_penguins)
+encode = ['island', 'sex']
+df_penguins = pd.get_dummies(input_penguins, prefix=encode)
+X = df_penguins[:1]
+
+target_mapper= {'Adelie':0, 'Chinstrap':1, 'Gentoo':2}
+
+def tar_enc(val):
+  return target_mapper[val] 
+y = y_raw.apply(tar_enc)
+
+with st.expander('Data prerp'):
+  st.write('**Encded y x (Input pengunis)**')
+  st.dataframe(input_row)
+  st.write('**Encded y**')
+  st.dataframe(y)  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
