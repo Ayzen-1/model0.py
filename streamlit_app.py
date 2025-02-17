@@ -27,17 +27,17 @@ with st.sidebar:
 st.subheader('Data Visualization')
 fig = px.scatter(
   df,
-  x=bill_length_mm
-  y=bill_depth_mm
-  color='island'
+  x=bill_length_mm,
+  y=bill_depth_mm,
+  color='island',
   title='len vs depth'
 )
 st.plotly_chart(fig)
 
 fig2 = px.histogramm(
   df, 
-  x=body_mass_g
-  nbins= 30
-  title='Mass'
+  x=body_mass_g,
+  nbins= 30,
+  title='Mass',
 )
 st.plotly_chart(fig2)
