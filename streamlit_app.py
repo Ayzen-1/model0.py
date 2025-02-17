@@ -1,8 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import sklearn.ensemble import RandomForestClassfier
-
+from sklearn.ensemble import RandomForestClassifier
 
 st.title('🎈 Я что то делаю')
 
@@ -78,7 +77,7 @@ with st.expander('Data prerp'):
   st.dataframe(y)  
 
 
-base_rf = RandomForestClassfier(random_state=42)
+base_rf = RandomForestClassifier(random_state=42)
 base_rf.fit(X, y)
 prediction = base_rf.predict(input_row)
 predict_proba = base_rf.predicr_prba(input_row)
