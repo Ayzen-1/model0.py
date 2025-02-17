@@ -42,8 +42,8 @@ fig2 = px.histogram(
 )
 st.plotly_chart(fig2)
 
+input_df = pd.DataFrame(data, index=[0])
 input_penguins = pd.concat([input_df, X_raw], axis=0)
-
 
 with st.expander('Inp Feat'):
   st.write('**Input pengunis**')
