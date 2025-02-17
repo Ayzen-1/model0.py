@@ -15,6 +15,7 @@ with st.expander('Data'):
   y_raw = df.species
   st.dataframe(y_raw)
 
+
 with st.sidebar:
   st.header("Input same:")
   island = st.selectbox('Island', ('Torgerson', 'Dream', 'Biscose'))
@@ -40,6 +41,9 @@ fig2 = px.histogram(
     title='Distribution of Body Mass'
 )
 st.plotly_chart(fig2)
+
+input_penguins = pd.concat([input_df, X_raw], axis=0)
+
 
 with st.expander('Inp Feat'):
   st.write('**Input pengunis**')
